@@ -3,12 +3,7 @@
 namespace Cilex\Command;
 
 if (!$loader = include __DIR__.'/vendor/autoload.php') {
-    echo "\n";
-    echo 'You must set up the project dependencies.' . "\n";
-    echo "\n";
-    echo 'Read README.md' . "\n";
-    echo "\n";
-    die();
+    die('You must set up the project dependencies.');
 }
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -60,3 +55,4 @@ $app = new \Cilex\Application('Tracker');
 $app->command(new \Cilex\Command\Process());
 
 $app->run();
+
