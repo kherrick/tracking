@@ -3,8 +3,7 @@
 /**
  * File operations
  */
-class fileOps
-{
+class fileOps {
 
     /**
      * Date
@@ -19,7 +18,7 @@ class fileOps
      */
     public function __construct()
     {
-        $this->date = date('Y-m-d');
+        $this->date = date('Y-M-d');
     }
 
     /**
@@ -30,25 +29,25 @@ class fileOps
     * @return null
     *
     * Append to the default logging file.
-    * debugToFile('it works...');
+    * debugToFile('it works…');
     *
     * Append to the default logging file, same as above.
-    * debugToFile('it works...', FILE_APPEND,'/usr/local/zend/var/log/php.log');
+    * debugToFile('it works…', FILE_APPEND,'/usr/local/zend/var/log/php.log');
     *
     * Overwrite the default logging file.
-    * debugToFile('it works...', null);
+    * debugToFile('it works…', null);
     *
     * Overwrite to temporary_logging_filename.log. Create if necessary.
     * debugToFile($variable,null,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     * Append to temporary_logging_filename.log. Create if necessary.
-    * debugToFile('it works...',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
+    * debugToFile('it works…',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     */
     public function debugToFile($data = null, $flags = FILE_APPEND, $file = '../../log.txt')
     {
         //get timestamp for logging purposes
-        $timestamp = date('[d-m-Y H:i:s e]') . " debugToFile data below:\n";
+        $timestamp = date('[d-M-Y H:i:s e]') . " debugToFile data below:\n";
 
         //turn on output buffering, get the buffer contents, and delete output buffer
         ob_start();
@@ -70,19 +69,19 @@ class fileOps
     * @return null
     *
     * Append to the default logging file.
-    * writeToFile('it works...');
+    * writeToFile('it works…');
     *
     * Append to the default logging file, same as above.
-    * writeToFile('it works...', FILE_APPEND,'/usr/local/zend/var/log/php.log');
+    * writeToFile('it works…', FILE_APPEND,'/usr/local/zend/var/log/php.log');
     *
     * Overwrite the default logging file.
-    * writeToFile('it works...', null);
+    * writeToFile('it works…', null);
     *
     * Overwrite to temporary_logging_filename.log. Create if necessary.
     * writeToFile($variable,null,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     * Append to temporary_logging_filename.log. Create if necessary.
-    * writeToFile('it works...',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
+    * writeToFile('it works…',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     */
     public function writeToFile($data = null, $flags = FILE_APPEND, $file = '../../log.txt')
@@ -96,11 +95,11 @@ class fileOps
 /**
  * postUtility Class
  */
-class postUtility
-{
-    const SETTINGS = '../../config/settings.ini';
-    public $config;
+class postUtility {
+
+    const passcode = ddPJBUZLPO9rkLj69Uz6eX3kSlaAyIC7LAw53fOQFfbfMvgKtbnDBvkBU1swtBdGsZQwfoJLtkEtHZ4FaV3YkmfwIbpIkVFLTkm8tmHbGKcr1xPZ4SiR1Y4hNytctVzw;
     public $post;
+    public $key;
 
     /**
      *
@@ -109,13 +108,8 @@ class postUtility
      */
     public function __construct()
     {
-        $this->config  = $this->loadConfig();
-        $this->post    = $_POST;
-    }
-
-    private function loadConfig()
-    {
-        return parse_ini_file(self::SETTINGS, true);
+        $this->post = $_POST;
+        $this->key  = $_POST['key'];
     }
 
     /**
@@ -132,8 +126,7 @@ class postUtility
      * @param  string $organization
      * @return null
      */
-    private function send_data_in_post($url, $info, $name, $employer, $organization)
-    {
+    public function send_data_in_post($url, $info, $name, $employer, $organization) {
         $fields = array(
             'i' => urlencode($info),
             'n' => urlencode($name),
@@ -177,8 +170,7 @@ class postUtility
      * @param  string $organization
      * @return null
      */
-    private function send_data_in_url($url, $info, $name, $employer, $organization)
-    {
+    public function send_data_in_url($url, $info, $name, $employer, $organization) {
 
         $i = 'i=' . $info;
         $n = 'n=' . $name;
@@ -200,8 +192,8 @@ $fileOps = new fileOps();
 $postUtility = new postUtility();
 
 //Check the key passed via the post
-if ($postUtility->config['global']['key'] == $postUtility->post['key'])
-{
+if ($postUtility->key == $postUtility::passcode) {
+
     //setup content to be wrote the file
     $date    = $postUtility->post['DATE'];
     $time    = $postUtility->post['TIME'];
@@ -219,7 +211,10 @@ if ($postUtility->config['global']['key'] == $postUtility->post['key'])
     $cellsig = $postUtility->post['CELLSIG'];
     $cellsrv = $postUtility->post['CELLSRV'];
 
+
     $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt,LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid,CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
 
-    $fileOps->writeToFile($content, FILE_APPEND, '../../logs/' . $fileOps->date . '_post_capture.log');
+    $fileOps->writeToFile($content, FILE_APPEND, '../logs/' . $fileOps->date . '_post_capture.log');
 }
+
+?>
