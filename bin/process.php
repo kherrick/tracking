@@ -32,16 +32,20 @@ class scriptHandler
      */
     public function lineHandler($file)
     {
-        foreach ($file as $lineNum => $line) {
-            $dates     = $this->getDates($line);
-            $times     = $this->getTimes($line);
-            $content   = $dates . '@' . $times;
+        foreach ($file as $line) {
+            $content = array(
+                'date'      => $this->getDate($line),
+                'time'      => $this->getTime($line),
+                'battery'   => $this->getBattery($line),
+                'latitude'  => $this->getLatitude($line),
+                'longitude' => $this->getLongitude($line)
+            );
 
             $this->results[] = $content;
         }
     }
 
-    private function getDates($line)
+    private function getDate($line)
     {
         $results    = '';
 
@@ -56,7 +60,7 @@ class scriptHandler
         return $results;
     }
 
-    private function getTimes($line)
+    private function getTime($line)
     {
         $results    = '';
 
@@ -69,11 +73,50 @@ class scriptHandler
 
         return $results;
     }
+
+    private function getBattery($line)
+    {
+        $results = '';
+
+        $comma   = explode(',', $line);
+        $at      = explode('@', $comma[0]);
+        $colon   = explode(':', $at[1]);
+        $content = $colon[1];
+
+        $results = $content;
+
+        return $results;
+    }
+
+    private function getLatitude($line)
+    {
+        $results = '';
+
+        $comma   = explode(',', $line);
+        $colon      = explode(':', $comma[2]);
+        $content = $colon[1];
+
+        $results = $content;
+
+        return $results;
+    }
+
+    private function getLongitude($line)
+    {
+        $results = '';
+
+        $comma   = explode(',', $line);
+        $content = $comma[3];
+
+        $results = $content;
+
+        return $results;
+    }
 }
 
 $script      = new scriptHandler;
-$fileHandler = $script->fileHandler('../logs/2013-Sep-25_post_capture.log');
+$fileHandler = $script->fileHandler('../logs/2013-Oct-20_post_capture.log');
 $lineHandler = $script->lineHandler($fileHandler);
 $results     = $script->getResults();
 
-var_dump($results);
+echo json_encode($results);
