@@ -5,24 +5,16 @@
 
 class scriptHandler
 {
-    private $fileHandler;
-
-    private $lineHandler = array();
+    public $results = array();
 
     /**
-     * __invoke method is called when a script tries to call the object as a function
+     * getter for results
      *
-     * the idea here is to kick off the series of steps required to parse the log file
-     *
-     * @param  string $logname filename of log to process
-     * @return object
+     * @return array the results of the script
      */
-    private function __invoke($logname)
+    public function getResults()
     {
-        self::fileHandler($logname);
-        self::lineHandler();
-
-        return $this->lineHandler;
+        return $this->results;
     }
 
     /**
@@ -30,22 +22,22 @@ class scriptHandler
      * @param  string $filename filename of log to process
      * @return object
      */
-    private function fileHandler($filename)
+    public function fileHandler($filename)
     {
-        $this->fileHandler = file($filename);
+        return file($filename);
     }
 
     /**
      * processes the lines of a file
      */
-    private function lineHandler()
+    public function lineHandler($file)
     {
-        foreach ($this->fileHandler as $lineNum => $line) {
+        foreach ($file as $lineNum => $line) {
             $dates     = $this->getDates($line);
             $times     = $this->getTimes($line);
             $content   = $dates . '@' . $times;
 
-            $this->lineHandler[] = $content;
+            $this->results[] = $content;
         }
     }
 
@@ -79,8 +71,9 @@ class scriptHandler
     }
 }
 
-$script = new scriptHandler();
-
-$results = $script('../logs/2013-Sep-25_post_capture.log');
+$script      = new scriptHandler;
+$fileHandler = $script->fileHandler('../logs/2013-Sep-25_post_capture.log');
+$lineHandler = $script->lineHandler($fileHandler);
+$results     = $script->getResults();
 
 var_dump($results);

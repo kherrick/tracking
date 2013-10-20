@@ -3,7 +3,8 @@
 /**
  * File operations
  */
-class fileOps {
+class fileOps
+{
 
     /**
      * Date
@@ -95,11 +96,11 @@ class fileOps {
 /**
  * postUtility Class
  */
-class postUtility {
-
-    const passcode = ddPJBUZLPO9rkLj69Uz6eX3kSlaAyIC7LAw53fOQFfbfMvgKtbnDBvkBU1swtBdGsZQwfoJLtkEtHZ4FaV3YkmfwIbpIkVFLTkm8tmHbGKcr1xPZ4SiR1Y4hNytctVzw;
+class postUtility
+{
+    const SETTINGS = '../../config/settings.ini';
+    public $config;
     public $post;
-    public $key;
 
     /**
      *
@@ -108,8 +109,13 @@ class postUtility {
      */
     public function __construct()
     {
-        $this->post = $_POST;
-        $this->key  = $_POST['key'];
+        $this->config  = $this->loadConfig();
+        $this->post    = $_POST;
+    }
+
+    private function loadConfig()
+    {
+        return parse_ini_file(self::SETTINGS, true);
     }
 
     /**
@@ -126,7 +132,8 @@ class postUtility {
      * @param  string $organization
      * @return null
      */
-    public function send_data_in_post($url, $info, $name, $employer, $organization) {
+    private function send_data_in_post($url, $info, $name, $employer, $organization)
+    {
         $fields = array(
             'i' => urlencode($info),
             'n' => urlencode($name),
@@ -170,7 +177,8 @@ class postUtility {
      * @param  string $organization
      * @return null
      */
-    public function send_data_in_url($url, $info, $name, $employer, $organization) {
+    private function send_data_in_url($url, $info, $name, $employer, $organization)
+    {
 
         $i = 'i=' . $info;
         $n = 'n=' . $name;
@@ -192,7 +200,8 @@ $fileOps = new fileOps();
 $postUtility = new postUtility();
 
 //Check the key passed via the post
-if ($postUtility->key == $postUtility::passcode) {
+if ($postUtility->config['global']['key'] == $postUtility->post['key'])
+{
 
     //setup content to be wrote the file
     $date    = $postUtility->post['DATE'];
@@ -214,7 +223,7 @@ if ($postUtility->key == $postUtility::passcode) {
 
     $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt,LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid,CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
 
-    $fileOps->writeToFile($content, FILE_APPEND, '../logs/' . $fileOps->date . '_post_capture.log');
+    $fileOps->writeToFile($content, FILE_APPEND, '../../logs/' . $fileOps->date . '_post_capture.log');
 }
 
 ?>
