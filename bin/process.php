@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-//DT:9-25-2013_19.00@BATT:62,SMSRF:+16782088377,LOC:42.5248564,-83.12676441,LOCACC:49,LOCALT:165.3000030517578,LOCSPD:0.0,LOCTMS:1380150011,LOCN:42.525519,-83.1263469,LOCNACC:101,LOCNTMS:1380150001,CELLID:GSM:11298.13457083,CELLSIG:4,CELLSRV:service
+//DT:4-15-2011_11.12@BATT:12,SMSRF:+15558675309,LOC:32.5241664,-73.1145664,LOCACC:49,LOCALT:165.3000030517578,LOCSPD:0.0,LOCTMS:1458423011,LOCN:32.5241664,-73.1145664,LOCNACC:101,LOCNTMS:1458423011,CELLID:GSM:12245.14455082,CELLSIG:4,CELLSRV:service
 
 class scriptHandler
 {
@@ -34,11 +34,23 @@ class scriptHandler
     {
         foreach ($file as $line) {
             $content = array(
-                'date'      => $this->getDate($line),
-                'time'      => $this->getTime($line),
-                'battery'   => $this->getBattery($line),
-                'latitude'  => $this->getLatitude($line),
-                'longitude' => $this->getLongitude($line)
+                'date'                          => $this->getDate($line),
+                'time'                          => $this->getTime($line),
+                'battery'                       => $this->getBattery($line),
+                'lastSMS'                       => $this->getLastSMS($line),
+                'latitude'                      => $this->getLatitude($line),
+                'longitude'                     => $this->getLongitude($line),
+                'locationAccuracy'              => $this->getLocationAccuracy($line),
+                'locationAccuracy'              => $this->getLocationAccuracy($line),
+                'locationSpeed'                 => $this->getLocationSpeed($line),
+                'locationFixTimeSeconds'        => $this->getLocationFixTimeSeconds($line),
+                'latitudeNetwork'               => $this->getLatitudeNetwork($line),
+                'longitudeNetwork'              => $this->getLongitudeNetwork($line),
+                'locationNetworkAccuracy'       => $this->getLocationNetworkAccuracy($line),
+                'locationNetworkFixTimeSeconds' => $this->getLocationNetworkFixTimeSeconds($line),
+                'cellTowerId'                   => $this->getCellTowerId($line),
+                'cellSignalStrength'            => $this->getCellSignalStrength($line),
+                'cellServiceState'              => $this->getCellServiceState($line)
             );
 
             $this->results[] = $content;
@@ -47,68 +59,159 @@ class scriptHandler
 
     private function getDate($line)
     {
-        $results    = '';
-
         $comma      = explode(',', $line);
         $at         = explode('@', $comma[0]);
         $underscore = explode('_', $at[0]);
         $colon      = explode(':', $underscore[0]);
-        $content    = $colon[1];
-
-        $results    = $content;
+        $results    = $colon[1];
 
         return $results;
     }
 
     private function getTime($line)
     {
-        $results    = '';
-
         $comma      = explode(',', $line);
         $at         = explode('@', $comma[0]);
         $underscore = explode('_', $at[0]);
-        $content    = $underscore[1];
-
-        $results    = $content;
+        $results    = $underscore[1];
 
         return $results;
     }
 
     private function getBattery($line)
     {
-        $results = '';
-
         $comma   = explode(',', $line);
         $at      = explode('@', $comma[0]);
         $colon   = explode(':', $at[1]);
-        $content = $colon[1];
+        $results = $colon[1];
 
-        $results = $content;
+        return $results;
+    }
+
+    private function getLastSMS($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[1]);
+        $results = $colon[1];
 
         return $results;
     }
 
     private function getLatitude($line)
     {
-        $results = '';
-
         $comma   = explode(',', $line);
-        $colon      = explode(':', $comma[2]);
-        $content = $colon[1];
-
-        $results = $content;
+        $colon   = explode(':', $comma[2]);
+        $results = $colon[1];
 
         return $results;
     }
 
     private function getLongitude($line)
     {
-        $results = '';
-
         $comma   = explode(',', $line);
-        $content = $comma[3];
+        $results = $comma[3];
 
-        $results = $content;
+        return $results;
+    }
+
+    private function getLocationAccuracy($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[4]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getLocationAltitude($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[5]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getLocationSpeed($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[6]);
+        $results = $colon[1];
+
+        // data is saved in meters per second
+        // for miles per hour use:
+        // $results = $results * 2.2369363;
+
+        return $results;
+    }
+
+    private function getLocationFixTimeSeconds($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[7]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getLatitudeNetwork($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[8]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getLongitudeNetwork($line)
+    {
+        $comma   = explode(',', $line);
+        $results = $comma[9];
+
+        return $results;
+    }
+
+    private function getLocationNetworkAccuracy($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[10]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getLocationNetworkFixTimeSeconds($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[11]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getCellTowerId($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[12]);
+        $results = $colon[1] . ':' . $colon[2];
+
+        return $results;
+    }
+
+    private function getCellSignalStrength($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[13]);
+        $results = $colon[1];
+
+        return $results;
+    }
+
+    private function getCellServiceState($line)
+    {
+        $comma   = explode(',', $line);
+        $colon   = explode(':', $comma[14]);
+        $results = $colon[1];
 
         return $results;
     }
@@ -119,4 +222,5 @@ $fileHandler = $script->fileHandler('../logs/2013-Oct-20_post_capture.log');
 $lineHandler = $script->lineHandler($fileHandler);
 $results     = $script->getResults();
 
-echo json_encode($results);
+// echo json_encode($results);
+print_r($results);
