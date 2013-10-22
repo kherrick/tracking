@@ -55,4 +55,3 @@ $app = new \Cilex\Application('Tracker');
 $app->command(new \Cilex\Command\Process());
 
 $app->run();
-
