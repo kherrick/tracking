@@ -19,7 +19,7 @@ class fileOps
      */
     public function __construct()
     {
-        $this->date = date('Y-M-d');
+        $this->date = date('Y-m-d');
     }
 
     /**
@@ -48,7 +48,7 @@ class fileOps
     public function debugToFile($data = null, $flags = FILE_APPEND, $file = '../../log.txt')
     {
         //get timestamp for logging purposes
-        $timestamp = date('[d-M-Y H:i:s e]') . " debugToFile data below:\n";
+        $timestamp = date('[d-m-Y H:i:s e]') . " debugToFile data below:\n";
 
         //turn on output buffering, get the buffer contents, and delete output buffer
         ob_start();
