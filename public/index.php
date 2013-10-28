@@ -30,19 +30,19 @@ class fileOps
     * @return null
     *
     * Append to the default logging file.
-    * debugToFile('it works…');
+    * debugToFile('it works...');
     *
     * Append to the default logging file, same as above.
-    * debugToFile('it works…', FILE_APPEND,'/usr/local/zend/var/log/php.log');
+    * debugToFile('it works...', FILE_APPEND,'/usr/local/zend/var/log/php.log');
     *
     * Overwrite the default logging file.
-    * debugToFile('it works…', null);
+    * debugToFile('it works...', null);
     *
     * Overwrite to temporary_logging_filename.log. Create if necessary.
     * debugToFile($variable,null,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     * Append to temporary_logging_filename.log. Create if necessary.
-    * debugToFile('it works…',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
+    * debugToFile('it works...',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     */
     public function debugToFile($data = null, $flags = FILE_APPEND, $file = '../../log.txt')
@@ -70,19 +70,19 @@ class fileOps
     * @return null
     *
     * Append to the default logging file.
-    * writeToFile('it works…');
+    * writeToFile('it works...');
     *
     * Append to the default logging file, same as above.
-    * writeToFile('it works…', FILE_APPEND,'/usr/local/zend/var/log/php.log');
+    * writeToFile('it works...', FILE_APPEND,'/usr/local/zend/var/log/php.log');
     *
     * Overwrite the default logging file.
-    * writeToFile('it works…', null);
+    * writeToFile('it works...', null);
     *
     * Overwrite to temporary_logging_filename.log. Create if necessary.
     * writeToFile($variable,null,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     * Append to temporary_logging_filename.log. Create if necessary.
-    * writeToFile('it works…',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
+    * writeToFile('it works...',FILE_APPEND,'/usr/local/zend/var/log/temporary_logging_filename.log');
     *
     */
     public function writeToFile($data = null, $flags = FILE_APPEND, $file = '../../log.txt')
