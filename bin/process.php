@@ -9,9 +9,9 @@ use Tracker\Data\Transformer as Transformer;
 
 class Process
 {
-    protected $pathToLogs = '../logs/YYYY-MM-DD_post_capture.log';
+    protected $pathToLogs = '../logs/YYYY-MM-DD_post_capture_DOT_log';
 
-    protected $results = array();
+    protected $results;
 
     public function __construct()
     {
@@ -24,9 +24,20 @@ class Process
         $dataLineHandler = $data->lineHandler();
         $dataResults     = $data->getResults();
 
-        $this->results = $dataResults;
+        //see https://developers.google.com/maps/documentation/staticmaps/
+        $url = 'http://maps.googleapis.com/maps/api/staticmap?size=640x640&zoom=4&sensor=false&markers=';
 
-        print_r($this->results);
+        //append latitude and longitude from each line of the file
+        foreach ($dataResults as $key => $value) {
+            $url .= $value['latitude'] . ',' . $value['longitude'] . "|";
+        }
+
+        //strip last pipe from the foreach above
+        $url = substr($url, 0, strlen($url)-1);
+
+        $this->results = $url . "\n";
+
+        echo $this->results;
     }
 }
 

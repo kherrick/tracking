@@ -202,7 +202,6 @@ $postUtility = new postUtility();
 //Check the key passed via the post
 if ($postUtility->config['global']['key'] == $postUtility->post['key'])
 {
-
     //setup content to be wrote the file
     $date    = $postUtility->post['DATE'];
     $time    = $postUtility->post['TIME'];
@@ -220,10 +219,7 @@ if ($postUtility->config['global']['key'] == $postUtility->post['key'])
     $cellsig = $postUtility->post['CELLSIG'];
     $cellsrv = $postUtility->post['CELLSRV'];
 
-
     $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt,LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid,CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
 
     $fileOps->writeToFile($content, FILE_APPEND, '../../logs/' . $fileOps->date . '_post_capture.log');
 }
-
-?>
