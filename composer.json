@@ -1,0 +1,8 @@
+{
+    "require": {
+        "cilex/cilex": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {"Tracker\\": "src/"}
+    }
+}
