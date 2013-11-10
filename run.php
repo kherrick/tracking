@@ -3,7 +3,12 @@
 namespace Cilex\Command;
 
 if (!$loader = include __DIR__.'/vendor/autoload.php') {
-    die('You must set up the project dependencies.');
+    echo "\n";
+    echo 'You must set up the project dependencies.' . "\n";
+    echo "\n";
+    echo 'Read README.md' . "\n";
+    echo "\n";
+    die();
 }
 
 use Symfony\Component\Console\Input\InputArgument;
