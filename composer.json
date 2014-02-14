@@ -3,6 +3,8 @@
         "cilex/cilex": "dev-master"
     },
     "autoload": {
-        "psr-0": {"Tracker\\": "src/"}
+        "psr-4": {
+            "Tracker\\": "src/Tracker/"
+        }
     }
 }
