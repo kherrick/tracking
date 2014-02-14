@@ -50,8 +50,10 @@ class Process extends Command
     }
 }
 
-$app = new \Cilex\Application('Tracker');
+$config  = parse_ini_file('config/settings.ini', true);
+$name    = $config['global']['name'];
+$version = $config['global']['version'];
+$app     = new \Cilex\Application($name, $version);
 
 $app->command(new \Cilex\Command\Process());
-
 $app->run();
