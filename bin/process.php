@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-namespace bin\process;
+namespace bin\Process;
 
 const   PATH_TO_TRANSFORMER = '../src/Tracker/Data/Transformer.php';
 include __DIR__ . '/' . PATH_TO_TRANSFORMER;
@@ -41,4 +41,4 @@ class Process
     }
 }
 
-$run = new \bin\process\Process();
+$run = new \bin\Process\Process();

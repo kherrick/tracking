@@ -10,9 +10,18 @@ use Tracker\Data\Transformer as Transformer;
 
 class Process extends Command
 {
-    protected $pathToLogs = 'logs/';
+    /**
+     * the log file path
+     * @var string
+     */
+    protected $pathToLogs;
 
-    protected $results;
+    public function __construct($logPath)
+    {
+        $this->pathToLogs = $logPath;
+
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -26,9 +35,15 @@ class Process extends Command
     {
         //check if the log argument was passed
         if ($input->getArgument('log')) {
-            $log = explode('=', $input->getArgument('log'));
-            $file = $this->pathToLogs . $log[1];
-            if (!file_exists($file)) {
+            $logArgument = explode('=', $input->getArgument('log'));
+
+            isset($logArgument[1])     ?
+                $log = $logArgument[1] :
+                $log = null;
+
+            $file = $this->pathToLogs . $log;
+
+            if (!is_file($file)) {
                 echo "log file doesn't exist...\n";
                 exit();
             }
@@ -55,8 +70,9 @@ class Process extends Command
         //strip last pipe from the foreach above
         $url = substr($url, 0, strlen($url)-1);
 
-        $this->results = $url . "\n";
+        $results = $url . "\n";
 
-        echo $this->results;
+        echo $results;
     }
 }
+

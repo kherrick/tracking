@@ -66,9 +66,9 @@ class Transformer
         $underscore = explode('_', $at[0]);
         $colon      = explode(':', $underscore[0]);
         $date       = explode('-', $colon[1]);
-        $year       = $date[2];
+        $year       = empty($date[2]) ? null : $date[2];
         $month      = $date[0];
-        $day        = $date[1];
+        $day        = empty($date[1]) ? null : $date[1];
         $results    = $year . '-' . $month  . '-' . $day;
 
         return $results;
@@ -81,7 +81,7 @@ class Transformer
         $underscore = explode('_', $at[0]);
         $time       = explode('.', $underscore[1]);
         $hour       = $time[0];
-        $minute     = $time[1];
+        $minute     = empty($time[1]) ? null : $time[1];
         $results    = $hour . ':' . $minute;
 
         return $results;
@@ -202,7 +202,10 @@ class Transformer
     {
         $comma   = explode(',', $line);
         $colon   = explode(':', $comma[12]);
-        $results = $colon[1] . ':' . $colon[2];
+
+        $results = empty($colon[1]) || empty($colon[2])
+            ? null
+            : $colon[1] . ':' . $colon[2];
 
         return $results;
     }
@@ -210,7 +213,7 @@ class Transformer
     protected function getCellSignalStrength($line)
     {
         $comma   = explode(',', $line);
-        $colon   = explode(':', $comma[13]);
+        $colon   = empty($comma[13]) ? null : explode(':', $comma[13]);
         $results = $colon[1];
 
         return $results;
@@ -219,7 +222,7 @@ class Transformer
     protected function getCellServiceState($line)
     {
         $comma   = explode(',', $line);
-        $colon   = explode(':', $comma[14]);
+        $colon   = empty($comma[14]) ? null : explode(':', $comma[14]);
         $results = $colon[1];
 
         return $results;

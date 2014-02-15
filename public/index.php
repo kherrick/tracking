@@ -7,33 +7,31 @@ if (!$loader = include __DIR__ . '/../vendor/autoload.php') {
 use Tracker\Utilities\File as File;
 use Tracker\Utilities\Post as Post;
 
-//Instantiate a new fileOps class
-$fileOps = new File();
+$file = new File();
+$post = new Post();
 
-//Instantiate a new postUtility class
-$postUtility = new Post();
+//Check the key
+if (!isset($post->post['key'])) exit();
 
-//Check the key passed via the post
-if ($postUtility->config['global']['key'] == $postUtility->post['key'])
+if ($post->config['global']['key'] == $post->post['key'])
 {
-    //setup content to be wrote the file
-    $date    = $postUtility->post['DATE'];
-    $time    = $postUtility->post['TIME'];
-    $batt    = $postUtility->post['BATT'];
-    $smsrf   = $postUtility->post['SMSRF'];
-    $loc     = $postUtility->post['LOC'];
-    $locacc  = $postUtility->post['LOCACC'];
-    $localt  = $postUtility->post['LOCALT'];
-    $locspd  = $postUtility->post['LOCSPD'];
-    $loctms  = $postUtility->post['LOCTMS'];
-    $locn    = $postUtility->post['LOCN'];
-    $locnacc = $postUtility->post['LOCNACC'];
-    $locntms = $postUtility->post['LOCNTMS'];
-    $cellid  = $postUtility->post['CELLID'];
-    $cellsig = $postUtility->post['CELLSIG'];
-    $cellsrv = $postUtility->post['CELLSRV'];
+    $date    = empty($post->post['DATE'])    ? null : $post->post['DATE'];
+    $time    = empty($post->post['TIME'])    ? null : $post->post['TIME'];
+    $batt    = empty($post->post['BATT'])    ? null : $post->post['BATT'];
+    $smsrf   = empty($post->post['SMSRF'])   ? null : $post->post['SMSRF'];
+    $loc     = empty($post->post['LOC'])     ? null : $post->post['LOC'];
+    $locacc  = empty($post->post['LOCACC'])  ? null : $post->post['LOCACC'];
+    $localt  = empty($post->post['LOCALT'])  ? null : $post->post['LOCALT'];
+    $locspd  = empty($post->post['LOCSPD'])  ? null : $post->post['LOCSPD'];
+    $loctms  = empty($post->post['LOCTMS'])  ? null : $post->post['LOCTMS'];
+    $locn    = empty($post->post['LOCN'])    ? null : $post->post['LOCN'];
+    $locnacc = empty($post->post['LOCNACC']) ? null : $post->post['LOCNACC'];
+    $locntms = empty($post->post['LOCNTMS']) ? null : $post->post['LOCNTMS'];
+    $cellid  = empty($post->post['CELLID'])  ? null : $post->post['CELLID'];
+    $cellsig = empty($post->post['CELLSIG']) ? null : $post->post['CELLSIG'];
+    $cellsrv = empty($post->post['CELLSRV']) ? null : $post->post['CELLSRV'];
 
     $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt,LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid,CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
 
-    $fileOps->write($content, FILE_APPEND, __DIR__ . '../logs/' . $fileOps->date . '_post_capture.log');
+    $file->write($content, FILE_APPEND, __DIR__ . '/../logs/' . $file->date . '_post_capture.log');
 }

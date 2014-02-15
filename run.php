@@ -12,6 +12,6 @@ $name    = $config['global']['name'];
 $version = $config['global']['version'];
 $app     = new \Cilex\Application($name, $version);
 
-$app->command(new Process());
+$app->command(new Process('logs/'));
 
 $app->run();
