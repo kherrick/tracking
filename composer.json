@@ -1,6 +1,7 @@
 {
     "require": {
-        "cilex/cilex": "dev-master"
+        "cilex/cilex": "dev-master",
+        "doctrine/orm": "*"
     },
     "autoload": {
         "psr-4": {

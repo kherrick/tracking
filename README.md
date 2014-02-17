@@ -14,3 +14,9 @@ tracking
 
 ###Data processing
 * Achieved with various scripts throught the project
+
+###Checking out Doctrine by following parts of:
+* http://www.doctrine-project.org/projects/orm.html
+* http://docs.doctrine-project.org/en/latest/tutorials/getting-started.html
+* http://www.doctrine-project.org/api/orm/2.4/class-Doctrine.ORM.EntityManager.html
+* http://www.doctrine-project.org/api/orm/2.4/class-Doctrine.ORM.EntityRepository.html

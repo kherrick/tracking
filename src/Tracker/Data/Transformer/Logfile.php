@@ -1,7 +1,7 @@
 <?php
-namespace Tracker\Data;
+namespace Tracker\Data\Transformer;
 
-class Transformer
+class Logfile
 {
     protected $data;
 

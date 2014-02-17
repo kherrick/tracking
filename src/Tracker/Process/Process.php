@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tracker\Data\Transformer as Transformer;
+use Tracker\Data\Transformer\Logfile;
 
 class Process extends Command
 {
@@ -55,7 +55,7 @@ class Process extends Command
         //begin processing
         $output->writeln('Processing...');
 
-        $data            = new Transformer($file);
+        $data            = new Logfile($file);
         $dataLineHandler = $data->lineHandler();
         $dataResults     = $data->getResults();
 

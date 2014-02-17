@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-if (!$loader = include __DIR__.'/vendor/autoload.php') {
+if (!$bootstrap = require_once __DIR__ . '/bootstrap.php') {
     die('You must set up the project dependencies.');
 }
 
@@ -15,3 +15,4 @@ $app     = new \Cilex\Application($name, $version);
 $app->command(new Process('logs/'));
 
 $app->run();
+

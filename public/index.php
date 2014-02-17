@@ -1,20 +1,17 @@
 <?php
 
-if (!$loader = include __DIR__ . '/../vendor/autoload.php') {
+if (!$bootstrap = require_once __DIR__ . '/../bootstrap.php') {
     die('You must set up the project dependencies.');
 }
 
-use Tracker\Utilities\File as File;
-use Tracker\Utilities\Post as Post;
+use Tracker\Utilities\File;
+use Tracker\Utilities\Post;
+use Tracker\Data\EntityOperations;
 
-$file = new File();
-$post = new Post();
-
-//Check the key
-if (!isset($post->post['key'])) exit();
-
-if ($post->config['global']['key'] == $post->post['key'])
+function logToFile($post)
 {
+    $file    = new File();
+
     $date    = empty($post->post['DATE'])    ? null : $post->post['DATE'];
     $time    = empty($post->post['TIME'])    ? null : $post->post['TIME'];
     $batt    = empty($post->post['BATT'])    ? null : $post->post['BATT'];
@@ -31,7 +28,48 @@ if ($post->config['global']['key'] == $post->post['key'])
     $cellsig = empty($post->post['CELLSIG']) ? null : $post->post['CELLSIG'];
     $cellsrv = empty($post->post['CELLSRV']) ? null : $post->post['CELLSRV'];
 
-    $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt,LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid,CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
+    $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt," .
+        "LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid," .
+        "CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
 
     $file->write($content, FILE_APPEND, __DIR__ . '/../logs/' . $file->date . '_post_capture.log');
+}
+
+function logToDatabase($post, $entityManager)
+{
+    $entityOps = new EntityOperations($entityManager);
+    $data      = [];
+    $postKeys  = [
+        'DATE', 'TIME', 'BATT', 'SMSRF', 'LOC', 'LOCACC', 'LOCALT', 'LOCSPD',
+        'LOCTMS', 'LOCN', 'LOCNACC', 'LOCNTMS', 'CELLID', 'CELLSIG', 'CELLSRV',
+    ];
+
+    foreach ($postKeys as $key) {
+        array_push($data, $post->post[$key]);
+    }
+
+    $entityOps->insert($data);
+
+    // // other operations
+    // $entityOps->show();
+
+    // $entityOps->select('1', 'Date');
+
+    // $entityOps->update('1', 'Date', '01-01-1970');
+
+    // $entityOps->drop('1');
+}
+
+//setup the post
+$post = new Post();
+
+//check the key
+if (!isset($post->post['key'])) exit();
+
+if ($post->config['global']['key'] == $post->post['key'])
+{
+    // $entityManager comes from bootstrap.php
+    logToDatabase($post, $entityManager);
+
+    // logToFile($post);
 }
