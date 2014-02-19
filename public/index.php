@@ -6,9 +6,14 @@ if (!$bootstrap = require_once __DIR__ . '/../bootstrap.php') {
 
 use Tracker\Utilities\File;
 use Tracker\Utilities\Post;
-use Tracker\Data\EntityOperations;
+use Tracker\Utilities\EntityOperations;
 
-function logToFile($post)
+/**
+ * log the post data to a file
+ * @param  Tracker\Utilities\Post $post
+ * @return null
+ */
+function logToFile(Tracker\Utilities\Post $post)
 {
     $file    = new File();
 
@@ -35,7 +40,13 @@ function logToFile($post)
     $file->write($content, FILE_APPEND, __DIR__ . '/../logs/' . $file->date . '_post_capture.log');
 }
 
-function logToDatabase($post, $entityManager)
+/**
+ * log the post data to a database
+ * @param  Tracker\Utilities\Post     $post
+ * @param  Doctrine\ORM\EntityManager $entityManager
+ * @return null
+ */
+function logToDatabase(Tracker\Utilities\Post $post, Doctrine\ORM\EntityManager $entityManager)
 {
     $entityOps = new EntityOperations($entityManager);
     $data      = [];
@@ -60,13 +71,15 @@ function logToDatabase($post, $entityManager)
     // $entityOps->drop('1');
 }
 
+$settings = parse_ini_file(__DIR__ . '/../config/settings.ini', true);
+
 //setup the post
 $post = new Post();
 
 //check the key
 if (!isset($post->post['key'])) exit();
 
-if ($post->config['global']['key'] == $post->post['key'])
+if ($settings['global']['key'] == $post->post['key'])
 {
     // $entityManager comes from bootstrap.php
     logToDatabase($post, $entityManager);

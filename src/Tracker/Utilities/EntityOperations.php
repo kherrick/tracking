@@ -1,7 +1,7 @@
 <?php
-namespace Tracker\Data;
+namespace Tracker\Utilities;
 
-use Tracker\Location\Location;
+use Tracker\Entity\Location;
 
 class EntityOperations
 {
@@ -15,15 +15,13 @@ class EntityOperations
 
     public function select($id, $getter)
     {
-        $location = $this->entityManager->find('Tracker\Location\Location', $id);
+        $location = $this->entityManager->find('Tracker\Entity\Location', $id);
 
         if ($location === null) {
             echo "No location found.\n";
         }
 
-        $val = $location->{"get$getter"}();
-
-        return $val;
+        return $location->{"get$getter"}();
     }
 
     public function insert($data)
@@ -54,7 +52,7 @@ class EntityOperations
 
     public function drop($id)
     {
-        $entity = $this->entityManager->find('Tracker\Location\Location', $id);
+        $entity = $this->entityManager->find('Tracker\Entity\Location', $id);
 
         try {
             $location = $this->entityManager->remove($entity);
@@ -69,7 +67,7 @@ class EntityOperations
 
     public function update($id, $setter, $value)
     {
-        $location = $this->entityManager->find('Tracker\Location\Location', $id);
+        $location = $this->entityManager->find('Tracker\Entity\Location', $id);
 
         if ($location === null) {
             echo "Location $id does not exist.\n";
@@ -86,7 +84,7 @@ class EntityOperations
 
     public function show()
     {
-        $locationRepository = $this->entityManager->getRepository('Tracker\Location\Location');
+        $locationRepository = $this->entityManager->getRepository('Tracker\Entity\Location');
         $locations = $locationRepository->findAll();
 
         $results = [];
@@ -133,7 +131,7 @@ class EntityOperations
             $results[] = $content;
         }
 
-        return json_encode($results);
+        return $results;
     }
 }
 

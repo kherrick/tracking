@@ -1,5 +1,5 @@
 <?php
-namespace Tracker\Location;
+namespace Tracker\Entity;
 
 class Location
 {

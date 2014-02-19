@@ -1,6 +1,9 @@
 <?php
 namespace Tracker\Data\Transformer;
 
+/**
+ * @todo move fileHandler and lineHandler, add setters
+ */
 class Logfile
 {
     protected $data;

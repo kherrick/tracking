@@ -1,27 +1,41 @@
-#!/bin/bash
-CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo $CWD
+#!/usr/bin/env bash
 
-cd $CWD
+#change directory to the project root
+bash_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $bash_source
 cd ..
 
-flag=0
+declare -a errors
 
+#check for required project resources
 if [ -d vendor ]; then
-    flag=1
-    echo The vendor directory already exists.
+    errors[${#errors[*]}]='vendor/'
+else
+	echo 'Running: bin/composer install'
+	bin/composer install
 fi
 
-if [ -f db.sqlite ]; then
-    flag=1
-    echo The database file db.sqlite already exists.
+#check for a database
+if [ -f databases/db.sqlite ]; then
+    errors[${#errors[*]}]='databases/db.sqlite'
+else
+	echo 'Running: bin/doctrine/init-database.php...'
+	bin/doctrine/init-database.php
 fi
 
-if [ $flag -eq 1 ]; then
-    echo Please initialize the project only once.
-    exit
+#display errors
+if [ ${#errors[*]} -gt 0 ]; then
+	IFS=$'\n'
+	echo
+	echo Resources not built because they already exist:
+    echo
+
+    for error in ${errors[*]}; do
+        echo -e $error
+    done
+    echo
+
+    exit 1
 fi
 
-bin/composer update
-bin/composer install
-bin/doctrine/init-database.php
+exit 0
