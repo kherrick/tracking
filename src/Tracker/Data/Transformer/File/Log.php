@@ -1,18 +1,15 @@
 <?php
-namespace Tracker\Data\Transformer;
+namespace Tracker\Data\Transformer\File;
 
-/**
- * @todo move fileHandler and lineHandler, add setters
- */
-class Logfile
+class Log
 {
-    protected $data;
+    protected $data = null;
 
     protected $results  = array();
 
-    public function __construct($pathToLogs)
+    public function __construct($file)
     {
-        $this->data = $this->fileHandler($pathToLogs);
+        $this->data = $this->fileHandler($file);
     }
 
     /**
@@ -27,12 +24,12 @@ class Logfile
 
     /**
      * fileHandler
-     * @param  string $filename filename of log to process
+     * @param  string $file file of log to process
      * @return array
      */
-    public function fileHandler($filename)
+    public function fileHandler($file)
     {
-        return file($filename);
+        return file($file);
     }
 
     public function lineHandler()

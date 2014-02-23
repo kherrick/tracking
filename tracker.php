@@ -7,7 +7,7 @@ if (!$bootstrap = require_once __DIR__ . '/bootstrap.php') {
 
 use Tracker\Command\Map;
 
-$settings = parse_ini_file('settings/settings.ini', true);
+$settings = parse_ini_file(__DIR__ . '/config/settings.ini', true);
 $name     = $settings['global']['name'];
 $version  = $settings['global']['version'];
 $app      = new \Cilex\Application($name, $version);

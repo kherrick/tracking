@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tracker\Data\Transformer\Logfile;
+use Tracker\Data\Transformer\File\Log;
 
 class Map extends Command
 {
@@ -28,7 +28,7 @@ class Map extends Command
         $logFile = $input->getArgument('logFile');
 
         if (!is_file($logFile)) {
-            echo "you must specify a logfile... \n";
+            echo "you must specify a log file... \n";
             echo "example: tracker.php map logs/YYYY-MM-DD_post_capture_DOT_log\n";
 
             exit(1);
@@ -36,7 +36,7 @@ class Map extends Command
             //begin processing
             $output->writeln('Processing...');
 
-            $data            = new Logfile($logFile);
+            $data            = new Log($logFile);
             $dataLineHandler = $data->lineHandler();
             $dataResults     = $data->getResults();
 

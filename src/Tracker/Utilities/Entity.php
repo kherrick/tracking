@@ -3,7 +3,7 @@ namespace Tracker\Utilities;
 
 use Tracker\Entity\Location;
 
-class EntityOperations
+class Entity
 {
 
     private $entityManager;

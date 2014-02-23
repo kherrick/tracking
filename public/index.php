@@ -4,41 +4,10 @@ if (!$bootstrap = require_once __DIR__ . '/../bootstrap.php') {
     die('You must set up the project dependencies.');
 }
 
+use Tracker\Service\Log;
+use Tracker\Entity\Post;
 use Tracker\Utilities\File;
-use Tracker\Utilities\Post;
-use Tracker\Utilities\EntityOperations;
-
-/**
- * log the post data to a file
- * @param  Tracker\Utilities\Post $post
- * @return null
- */
-function logToFile(Tracker\Utilities\Post $post)
-{
-    $file    = new File();
-
-    $date    = empty($post->post['DATE'])    ? null : $post->post['DATE'];
-    $time    = empty($post->post['TIME'])    ? null : $post->post['TIME'];
-    $batt    = empty($post->post['BATT'])    ? null : $post->post['BATT'];
-    $smsrf   = empty($post->post['SMSRF'])   ? null : $post->post['SMSRF'];
-    $loc     = empty($post->post['LOC'])     ? null : $post->post['LOC'];
-    $locacc  = empty($post->post['LOCACC'])  ? null : $post->post['LOCACC'];
-    $localt  = empty($post->post['LOCALT'])  ? null : $post->post['LOCALT'];
-    $locspd  = empty($post->post['LOCSPD'])  ? null : $post->post['LOCSPD'];
-    $loctms  = empty($post->post['LOCTMS'])  ? null : $post->post['LOCTMS'];
-    $locn    = empty($post->post['LOCN'])    ? null : $post->post['LOCN'];
-    $locnacc = empty($post->post['LOCNACC']) ? null : $post->post['LOCNACC'];
-    $locntms = empty($post->post['LOCNTMS']) ? null : $post->post['LOCNTMS'];
-    $cellid  = empty($post->post['CELLID'])  ? null : $post->post['CELLID'];
-    $cellsig = empty($post->post['CELLSIG']) ? null : $post->post['CELLSIG'];
-    $cellsrv = empty($post->post['CELLSRV']) ? null : $post->post['CELLSRV'];
-
-    $content = 'DT:' . $date . "_$time@BATT:$batt,SMSRF:$smsrf,LOC:$loc,LOCACC:$locacc,LOCALT:$localt," .
-        "LOCSPD:$locspd,LOCTMS:$loctms,LOCN:$locn,LOCNACC:$locnacc,LOCNTMS:$locntms,CELLID:$cellid," .
-        "CELLSIG:$cellsig,CELLSRV:$cellsrv\n";
-
-    $file->write($content, FILE_APPEND, __DIR__ . '/../logs/' . $file->date . '_post_capture.log');
-}
+use Tracker\Utilities\Entity;
 
 /**
  * log the post data to a database
@@ -46,9 +15,9 @@ function logToFile(Tracker\Utilities\Post $post)
  * @param  Doctrine\ORM\EntityManager $entityManager
  * @return null
  */
-function logToDatabase(Tracker\Utilities\Post $post, Doctrine\ORM\EntityManager $entityManager)
+function logToDatabase($post, Doctrine\ORM\EntityManager $entityManager)
 {
-    $entityOps = new EntityOperations($entityManager);
+    $entityOps = new Entity($entityManager);
     $data      = [];
     $postKeys  = [
         'DATE', 'TIME', 'BATT', 'SMSRF', 'LOC', 'LOCACC', 'LOCALT', 'LOCSPD',
@@ -56,7 +25,7 @@ function logToDatabase(Tracker\Utilities\Post $post, Doctrine\ORM\EntityManager 
     ];
 
     foreach ($postKeys as $key) {
-        array_push($data, $post->post[$key]);
+        array_push($data, $post[$key]);
     }
 
     $entityOps->insert($data);
@@ -74,15 +43,30 @@ function logToDatabase(Tracker\Utilities\Post $post, Doctrine\ORM\EntityManager 
 $settings = parse_ini_file(__DIR__ . '/../config/settings.ini', true);
 
 //setup the post
-$post = new Post();
+$post = $_POST;
 
 //check the key
-if (!isset($post->post['key'])) exit();
+if (!isset($post['key'])) exit();
 
-if ($settings['global']['key'] == $post->post['key'])
+if ($settings['global']['key'] == $post['key'])
 {
-    // $entityManager comes from bootstrap.php
-    logToDatabase($post, $entityManager);
+    // // $entityManager comes from bootstrap.php
+    // logToDatabase($post, $entityManager);
 
-    // logToFile($post);
+    //log to a file
+    //setup new log container
+    $container = new Pimple();
+
+    // define some parameters
+    $container['file'] = new File();
+    $container['post'] = new Post($post);
+
+    $container['log'] = $container->share(function($c) {
+        return new Log(
+            $c['file'],
+            $c['post']
+        );
+    });
+
+    $container['log']->write();
 }
