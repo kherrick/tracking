@@ -5,66 +5,61 @@ if (!$bootstrap = require_once __DIR__ . '/../bootstrap.php') {
 }
 
 use Tracker\Service\Log;
+use Tracker\Service\Database;
+
 use Tracker\Entity\Post;
 use Tracker\Utilities\File;
-use Tracker\Utilities\Entity;
-
-/**
- * log the post data to a database
- * @param  Tracker\Utilities\Post     $post
- * @param  Doctrine\ORM\EntityManager $entityManager
- * @return null
- */
-function logToDatabase($post, Doctrine\ORM\EntityManager $entityManager)
-{
-    $entityOps = new Entity($entityManager);
-    $data      = [];
-    $postKeys  = [
-        'DATE', 'TIME', 'BATT', 'SMSRF', 'LOC', 'LOCACC', 'LOCALT', 'LOCSPD',
-        'LOCTMS', 'LOCN', 'LOCNACC', 'LOCNTMS', 'CELLID', 'CELLSIG', 'CELLSRV',
-    ];
-
-    foreach ($postKeys as $key) {
-        array_push($data, $post[$key]);
-    }
-
-    $entityOps->insert($data);
-
-    // // other operations
-    // $entityOps->show();
-
-    // $entityOps->select('1', 'Date');
-
-    // $entityOps->update('1', 'Date', '01-01-1970');
-
-    // $entityOps->drop('1');
-}
 
 $settings = parse_ini_file(__DIR__ . '/../config/settings.ini', true);
 
-//setup the post
-$post = $_POST;
-
 //check the key
-if (!isset($post['key'])) exit();
+if (!isset($_POST['key'])) exit();
 
-if ($settings['global']['key'] == $post['key'])
+if ($settings['global']['key'] == $_POST['key'])
 {
-    // // $entityManager comes from bootstrap.php
-    // logToDatabase($post, $entityManager);
+    // /**
+    //  * log to database: $entityManager comes from bootstrap.php
+    //  */
 
-    //log to a file
+    // //setup new log container
+    // $container = new Pimple();
+
+    // // define some parameters
+    // $container['entityManager'] = $entityManager;
+    // $container['data'] = new Tracker\Entity\Post($_POST);
+
+    // $container['database'] = $container->share(function($c) {
+    //     return new Database(
+    //         $c['entityManager'],
+    //         $c['data']
+    //     );
+    // });
+
+    // $container['database']->insert();
+
+    // // // other operations
+    // // $container['database']->show();
+
+    // // $container['database']->select('1', 'Date');
+
+    // // $container['database']->update('1', 'Date', '01-01-1970');
+
+    // // $container['database']->drop('1');
+
+    /**
+     * log to a file
+     */
     //setup new log container
     $container = new Pimple();
 
     // define some parameters
-    $container['file'] = new File();
-    $container['post'] = new Post($post);
+    $container['file'] = new Tracker\Utilities\File();
+    $container['data'] = new Tracker\Entity\Post($_POST);
 
     $container['log'] = $container->share(function($c) {
         return new Log(
             $c['file'],
-            $c['post']
+            $c['data']
         );
     });
 

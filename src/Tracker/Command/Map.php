@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tracker\Data\Transformer\File\Log;
+use Tracker\Data\Transformer\Log;
 
 class Map extends Command
 {

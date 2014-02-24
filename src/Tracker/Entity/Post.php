@@ -38,6 +38,11 @@ class Post
         $this->cellsrv = empty($post['CELLSRV']) ? null : $post['CELLSRV'];
     }
 
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
     public function getDate()
     {
         return $this->date;

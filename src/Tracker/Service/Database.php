@@ -1,16 +1,18 @@
 <?php
-namespace Tracker\Utilities;
+namespace Tracker\Service;
 
 use Tracker\Entity\Location;
 
-class Entity
+class Database
 {
 
-    private $entityManager;
+    private $entityManager = null;
+    private $data = null;
 
-    public function __construct($entityManager)
+    public function __construct($entityManager, $data)
     {
         $this->entityManager = $entityManager;
+        $this->data = $data;
     }
 
     public function select($id, $getter)
@@ -24,25 +26,25 @@ class Entity
         return $location->{"get$getter"}();
     }
 
-    public function insert($data)
+    public function insert()
     {
         $location = new Location;
 
-        $location->setDate($data[0]);
-        $location->setTime($data[1]);
-        $location->setBatt($data[2]);
-        $location->setSmsrf($data[3]);
-        $location->setLoc($data[4]);
-        $location->setLocacc($data[5]);
-        $location->setLocalt($data[6]);
-        $location->setLocspd($data[7]);
-        $location->setLoctms($data[8]);
-        $location->setLocn($data[9]);
-        $location->setLocnacc($data[10]);
-        $location->setLocntms($data[11]);
-        $location->setCellid($data[12]);
-        $location->setCellsig($data[13]);
-        $location->setCellsrv($data[14]);
+        $location->setDate($this->data->getDate());
+        $location->setTime($this->data->getTime());
+        $location->setBatt($this->data->getBattery());
+        $location->setSmsrf($this->data->getLastSMS());
+        $location->setLoc($this->data->getLocation());
+        $location->setLocacc($this->data->getLocationAccuracy());
+        $location->setLocalt($this->data->getLocationAltitude());
+        $location->setLocspd($this->data->getLocationSpeed());
+        $location->setLoctms($this->data->getLocationFixTimeSeconds());
+        $location->setLocn($this->data->getLocationNetwork());
+        $location->setLocnacc($this->data->getLocationNetworkAccuracy());
+        $location->setLocntms($this->data->getLocationNetworkFixTimeSeconds());
+        $location->setCellid($this->data->getCellTowerId());
+        $location->setCellsig($this->data->getCellSignalStrength());
+        $location->setCellsrv($this->data->getCellServiceState());
 
         $this->entityManager->persist($location);
         $this->entityManager->flush();

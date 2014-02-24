@@ -1,5 +1,7 @@
 <?php
-namespace Tracker\Data\Transformer\File;
+namespace Tracker\Data\Transformer;
+
+use Tracker\Utilities\File;
 
 class Log
 {
@@ -7,29 +9,10 @@ class Log
 
     protected $results  = array();
 
-    public function __construct($file)
+    public function __construct($filename)
     {
-        $this->data = $this->fileHandler($file);
-    }
-
-    /**
-     * getter for results
-     *
-     * @return array the results of the script
-     */
-    public function getResults()
-    {
-        return $this->results;
-    }
-
-    /**
-     * fileHandler
-     * @param  string $file file of log to process
-     * @return array
-     */
-    public function fileHandler($file)
-    {
-        return file($file);
+        $file = new File();
+        $this->data = $file->fileHandler($filename);
     }
 
     public function lineHandler()
@@ -57,6 +40,16 @@ class Log
 
             $this->results[] = $content;
         }
+    }
+
+    /**
+     * getter for results
+     *
+     * @return array the results of the script
+     */
+    public function getResults()
+    {
+        return $this->results;
     }
 
     protected function getDate($line)

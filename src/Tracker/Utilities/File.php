@@ -60,6 +60,16 @@ class File
     }
 
     /**
+     * fileHandler
+     * @param  string $file file of log to process
+     * @return array
+     */
+    public function fileHandler($file)
+    {
+        return file($file);
+    }
+
+    /**
      * Write the contents of a variable to a file
      * @param mixed $data the data to write to the file
      * @param int|resource $flags optional flags to use for write operations
