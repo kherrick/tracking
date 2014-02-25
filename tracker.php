@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 if (!$bootstrap = require_once __DIR__ . '/bootstrap.php') {
@@ -12,7 +12,7 @@ $name     = $settings['global']['name'];
 $version  = $settings['global']['version'];
 $app      = new \Cilex\Application($name, $version);
 
-$app->command(new Map());
+$app->command(new Map($entityManager));
 
 $app->run();
 

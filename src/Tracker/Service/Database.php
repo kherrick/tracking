@@ -15,6 +15,20 @@ class Database
         $this->data = $data;
     }
 
+    /**
+     * send a query to the entity manager
+     * @param  string $string
+     * @return array
+     */
+    public function query($string)
+    {
+        $query = $this->entityManager->createQuery($string);
+
+        $result = $query->getResult();
+
+        return $result;
+    }
+
     public function select($id, $getter)
     {
         $location = $this->entityManager->find('Tracker\Entity\Location', $id);

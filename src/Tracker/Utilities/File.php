@@ -61,7 +61,7 @@ class File
 
     /**
      * fileHandler
-     * @param  string $file file of log to process
+     * @param  string $file file to load as array
      * @return array
      */
     public function fileHandler($file)
