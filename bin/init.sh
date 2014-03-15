@@ -11,16 +11,16 @@ declare -a errors
 if [ -d vendor ]; then
     errors[${#errors[*]}]='vendor/'
 else
-	echo 'Running: bin/composer install'
-	bin/composer install
+	echo 'Running: bin/composer.phar install'
+	bin/composer.phar install
 fi
 
 #check for a database
 if [ -f databases/db.sqlite ]; then
     errors[${#errors[*]}]='databases/db.sqlite'
 else
-	echo 'Running: bin/doctrine/init-database.php...'
-	bin/doctrine/init-database.php
+	echo 'Running: bin/init-database.php...'
+	bin/init-database.php
 fi
 
 #display errors

@@ -5,7 +5,7 @@ tracking
 * Steps:
   * `$ git clone https://github.com/kherrick/tracking`
   * `$ cd tracking/`
-  * `$ bin/build.sh`
+  * `$ make init`
 
 ###Hosting
 * Successfully hosted on:
